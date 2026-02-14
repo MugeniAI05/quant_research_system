@@ -160,53 +160,53 @@ Sentiment Family (4 factors):
 
 ### 1. Quantitative Thinking
 
-✅ ** Understanding that correlation ≠ causation**
+** Understanding that correlation ≠ causation**
 - IC measures predictive power, not just correlation
 - Statistical significance testing prevents data mining
 - Quintile analysis verifies relationship is real
 
-✅ **Transaction costs matter**
+**Transaction costs matter**
 - 15 bps per round trip modeled explicitly
 - Turnover analysis shows cost impact
 - High-frequency strategies rejected automatically
 
-✅ **Prevent overfitting**
+**Prevent overfitting**
 - Pre-backtest validation filters
 - Statistical significance requirements
 - No parameter optimization on in-sample data
 
 ### 2. Software Engineering
 
-✅ **Production code quality**
+**Production code quality**
 - Proper error handling
 - Data validation at every step
 - Logging and observability
 - Type hints and documentation
 
-✅ **Modular architecture**
+**Modular architecture**
 - Each module has single responsibility
 - Easy to test components independently
 - Can swap implementations (e.g., different data sources)
 
-✅ **Configuration management**
+**Configuration management**
 - Centralized config file
 - No magic numbers in code
 - Easy to modify parameters
 
 ### 3. Domain Expertise
 
-✅ **Understand market microstructure**
+**Understand market microstructure**
 - Transaction costs modeled realistically
 - Slippage included
 - Position sizing with limits
 
-✅ **Knowledge of what matters**
+**Knowledge of what matters**
 - Sharpe ratio (risk-adjusted returns)
 - Maximum drawdown (tail risk)
 - Information coefficient (signal quality)
 - Win rate (reliability)
 
-✅ **Avoid common pitfalls**
+**Avoid common pitfalls**
 - No look-ahead bias
 - No survivorship bias (using delisted stocks if data includes them)
 - Realistic assumptions throughout
