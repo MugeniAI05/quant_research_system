@@ -1,6 +1,6 @@
 # Production Quantitative Research System
 
-A modular quantitative research framework implementing institutional research practices for systematic strategy evaluation.
+A modular quantitative research framework for systematic strategy evaluation.
 
 ## Design Principles
 
