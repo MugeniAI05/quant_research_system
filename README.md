@@ -4,13 +4,13 @@ A modular quantitative research framework implementing institutional research pr
 
 ## Key Features
 
-### Statistical Rigor
+### Statistics
 - **Information Coefficient (IC) Analysis**: Measures correlation between signals and forward returns
 - **Statistical Significance Testing**: T-tests and p-values to validate predictive power  
 - **Quintile Analysis**: Verifies monotonicity of returns across factor buckets
 - **Turnover Analysis**: Quantifies trading costs and holding periods
 
-## Design Principles
+### Design Principles
 
 - Separation of concerns between data, factor construction, validation, and execution
 - Validation-first approach before backtesting
@@ -74,7 +74,7 @@ pip install numpy pandas scipy yfinance duckduckgo-search
 ### Basic Usage
 
 ```python
-from main_pipeline import analyze_ticker
+from src.main_pipeline import analyze_ticker
 
 # Run complete analysis
 report, results = analyze_ticker("NVDA", period="2y")
@@ -90,7 +90,7 @@ print(f"Sharpe Ratio: {results['backtest']['metrics']['sharpe_ratio']}")
 ### Command Line Usage
 
 ```bash
-python main_pipeline.py AAPL
+python -m src.main_pipeline AAPL
 ```
 
 ## Sample Output
