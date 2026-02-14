@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide
+# Quick Start Guide
 
 ## Installation (5 minutes)
 
@@ -56,7 +56,7 @@ Or from command line:
 python main_pipeline.py NVDA
 ```
 
-## 📂 File Descriptions
+## File Descriptions
 
 | File | Size | Purpose |
 |------|------|---------|
@@ -72,7 +72,7 @@ python main_pipeline.py NVDA
 | **README.md** | 11K | Complete documentation |
 | **SYSTEM_SUMMARY.md** | 12K | What was built and why |
 
-## ⚡ 30-Second Test
+## 30-Second Test
 
 ```python
 # Test that everything works
@@ -93,7 +93,7 @@ ic_result = validator.calculate_ic(signal, forward_returns)
 print(f"✓ System working! IC: {ic_result.ic:.3f}, p-value: {ic_result.p_value:.3f}")
 ```
 
-## 🎯 Common Use Cases
+## Common Use Cases
 
 ### Use Case 1: Analyze Single Stock
 ```python
@@ -154,7 +154,7 @@ report = validator.validate_factor(
 print(report.recommendation)
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Issue: "No module named 'yfinance'"
 **Solution:** Install dependencies
@@ -185,7 +185,7 @@ analyze_ticker("AAPL", period="1mo")  # Only 20 days
 analyze_ticker("AAPL", period="1y")   # 252 days
 ```
 
-## 📊 Expected Output
+## Expected Output
 
 When you run the analysis, you'll see:
 
@@ -229,67 +229,10 @@ Signal Strength: BUY
 Confidence Level: MODERATE
 ```
 
-## 🎓 For Interviews
 
-When demoing this in an interview:
-
-1. **Start with the full pipeline**
-   ```python
-   python main_pipeline.py AAPL
-   ```
-
-2. **Explain the validation**
-   - "See how IC is 0.042 with p-value 0.002? That means statistically significant."
-   - "Quintile analysis shows monotonic returns - Q1 to Q5 is increasing."
-   - "Turnover is 25%, so transaction costs won't kill the strategy."
-
-3. **Show you understand trade-offs**
-   - "I'm using 5-day holding because that's where IC peaks in the decay analysis."
-   - "Transaction costs are 10 bps + 5 bps slippage = 15 bps round trip."
-   - "Sharpe of 1.2 is realistic - not the 3.0+ that screams overfitting."
-
-4. **Demonstrate you can modify**
-   - Change holding period in real-time
-   - Add a custom factor
-   - Explain what you'd improve for production
-
-## 🚀 Next Steps
-
-1. **Run the examples**
-   ```bash
-   python example_usage.py
-   ```
-
-2. **Read the documentation**
-   - README.md - Complete user guide
-   - SYSTEM_SUMMARY.md - What was built and why
-   - IMPROVEMENT_ROADMAP.md - How it addresses your original gaps
-
-3. **Customize for your use case**
-   - Modify config.py for your parameters
-   - Add custom factors in factor_engineering.py
-   - Test on your favorite stocks
-
-4. **Prepare for interviews**
-   - Practice explaining the IC calculation
-   - Be ready to modify code live
-   - Understand every design decision
-
-## 📞 Support
+## Support
 
 If you have questions:
 1. Check README.md first
 2. Review SYSTEM_SUMMARY.md for design decisions
 3. Look at example_usage.py for patterns
-
-## ✅ Verification Checklist
-
-Before your interview, verify:
-- [ ] Can run `python main_pipeline.py AAPL` successfully
-- [ ] Understand what IC measures
-- [ ] Can explain why 15 bps transaction costs
-- [ ] Know what Sharpe ratio means
-- [ ] Can modify holding period and see results change
-- [ ] Understand difference between your old code and this version
-
-You're ready! 🎯
