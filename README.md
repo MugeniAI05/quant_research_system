@@ -1,6 +1,6 @@
 # Production Quantitative Research System
 
-A production-ready quantitative research pipeline that implements industry-standard practices for systematic trading research.
+A modular quantitative research framework implementing institutional research practices for systematic strategy evaluation.
 
 ## Key Features
 
@@ -10,7 +10,15 @@ A production-ready quantitative research pipeline that implements industry-stand
 - **Quintile Analysis**: Verifies monotonicity of returns across factor buckets
 - **Turnover Analysis**: Quantifies trading costs and holding periods
 
-### Realistic Backtesting
+## Design Principles
+
+- Separation of concerns between data, factor construction, validation, and execution
+- Validation-first approach before backtesting
+- Explicit modeling of transaction costs
+- Reproducible research workflow
+- Modular extensibility for new factors and models
+
+### Backtesting
 - **No Look-Ahead Bias**: Uses only data available at decision time
 - **Transaction Costs**: 10 bps commissions + 5 bps slippage per trade
 - **Proper Position Sizing**: Risk-based allocation with maximum limits
@@ -26,16 +34,29 @@ A production-ready quantitative research pipeline that implements industry-stand
 
 ```
 quant_research_system/
-├── config.py                  # Configuration and constants
-├── data_fetcher.py           # Market data and news acquisition
-├── factor_engineering.py     # Technical factor computation
-├── sentiment_analysis.py     # News sentiment scoring
-├── factor_validation.py      # Statistical testing
-├── backtest_engine.py        # Realistic backtest simulation
-├── reporting.py              # Research report generation
-├── main_pipeline.py          # Main orchestration
-├── requirements.txt          # Dependencies
-└── README.md                 # This file
+├── README.md
+├── QUICK_START.md
+├── SYSTEM_SUMMARY.md
+├── requirements.txt
+├── docs/
+│   └── architecture.md
+├── examples/
+│   └── example_usage.py
+├── tests/
+│   └── test_simple.py
+└── src/
+    ├── main_pipeline.py
+    ├── config.py
+    ├── data/
+    │   └── data_fetcher.py
+    ├── factors/
+    │   ├── factor_engineering.py
+    │   ├── factor_validation.py
+    │   └── sentiment_analysis.py
+    ├── backtest/
+    │   └── backtest_engine.py
+    └── reporting/
+        └── reporting.py
 ```
 
 ## Quick Start
@@ -317,22 +338,22 @@ print(f"IC: {ic_result.ic:.3f}, p-value: {ic_result.p_value:.3f}")
    - Record validation results
    - Maintain audit trail
 
-## 🚫 Common Pitfalls to Avoid
+## Common Implementation Pitfalls
 
-❌ **Using future data in the past** (look-ahead bias)
-✅ Only use forward returns calculated from time t onward
+ **Using future data in the past** (look-ahead bias)
+ Only use forward returns calculated from time t onward
 
-❌ **Ignoring transaction costs**
-✅ Include 10-15 bps per trade minimum
+ **Ignoring transaction costs**
+ Include 10-15 bps per trade minimum
 
-❌ **Over-optimizing on historical data**
-✅ Validate on out-of-sample periods
+ **Over-optimizing on historical data**
+ Validate on out-of-sample periods
 
-❌ **Trading signals with IC < 0.02**
-✅ Set minimum quality thresholds
+ **Trading signals with IC < 0.02**
+ Set minimum quality thresholds
 
-❌ **High turnover strategies without cost analysis**
-✅ Calculate turnover impact explicitly
+ **High turnover strategies without cost analysis**
+ Calculate turnover impact explicitly
 
 ## References
 
