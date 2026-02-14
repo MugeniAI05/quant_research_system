@@ -84,10 +84,10 @@ analyze_ticker("AAPL", period="2y")
 ```
 ## Next Steps
 
-Review README.md for full methodology and system design.
+- Review README.md for full methodology and system design.
 
-Read SYSTEM_SUMMARY.md for architectural decisions.
+- Read SYSTEM_SUMMARY.md for architectural decisions.
 
-Explore the src/ directory to understand the modular pipeline structure.
+- Explore the src/ directory to understand the modular pipeline structure.
 
-Extend the system with new factors or validation criteria.
+- Extend the system with new factors or validation criteria.
