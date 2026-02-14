@@ -1,8 +1,8 @@
 # Production Quantitative Research System
 
-A production-ready quantitative research pipeline that implements industry-standard practices for systematic trading research. Built to demonstrate the technical rigor expected at firms like Two Sigma and SIG.
+A production-ready quantitative research pipeline that implements industry-standard practices for systematic trading research.
 
-## 🎯 Key Features
+## Key Features
 
 ### Statistical Rigor
 - **Information Coefficient (IC) Analysis**: Measures correlation between signals and forward returns
@@ -22,7 +22,7 @@ A production-ready quantitative research pipeline that implements industry-stand
 - **Factor Validation**: Pre-backtest filtering to avoid overfitting
 - **Automated Reporting**: Professional research notes with recommendations
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 quant_research_system/
@@ -38,7 +38,7 @@ quant_research_system/
 └── README.md                 # This file
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -72,7 +72,7 @@ print(f"Sharpe Ratio: {results['backtest']['metrics']['sharpe_ratio']}")
 python main_pipeline.py AAPL
 ```
 
-## 📊 Sample Output
+## Sample Output
 
 ```
 ================================================================================
@@ -134,7 +134,7 @@ Key Findings:
   ✓ Risk-adjusted returns are acceptable (Sharpe = 1.23)
 ```
 
-## 🔬 Technical Details
+## Technical Details
 
 ### Factor Families
 
@@ -186,21 +186,21 @@ Key Findings:
    - 15 bps round-trip costs
    - Minimum Sharpe: 0.5
 
-## 🎓 Interview Talking Points
+# Key Points:
 
 ### On Backtesting
-> "I prevent look-ahead bias by only using forward returns calculated from time t to t+h, ensuring no future information leaks into past decisions. Transaction costs are modeled at 10 bps for commissions plus 5 bps for slippage, totaling 15 bps per round trip."
+> I prevent look-ahead bias by only using forward returns calculated from time t to t+h, ensuring no future information leaks into past decisions. Transaction costs are modeled at 10 bps for commissions plus 5 bps for slippage, totaling 15 bps per round trip.
 
 ### On Factor Validation
-> "I validate factors using Information Coefficient analysis, which measures the Spearman correlation between factor values and forward returns. A factor must have an IC above 0.02 with statistical significance (p < 0.05) to be considered viable."
+> I validate factors using Information Coefficient analysis, which measures the Spearman correlation between factor values and forward returns. A factor must have an IC above 0.02 with statistical significance (p < 0.05) to be considered viable.
 
 ### On Overfitting Prevention
-> "I use multiple safeguards: statistical significance testing with p-values, minimum sample size requirements (200+ observations), quintile analysis to verify monotonicity, and accept/reject thresholds before backtesting to avoid data mining."
+> I use multiple safeguards: statistical significance testing with p-values, minimum sample size requirements (200+ observations), quintile analysis to verify monotonicity, and accept/reject thresholds before backtesting to avoid data mining.
 
 ### On Sentiment
-> "Rather than qualitative analysis, I use a Loughran-McDonald financial lexicon to score each headline numerically from -1 to +1. The scores are then aggregated using exponentially weighted averaging to give more weight to recent news."
+> Rather than qualitative analysis, I use a Loughran-McDonald financial lexicon to score each headline numerically from -1 to +1. The scores are then aggregated using exponentially weighted averaging to give more weight to recent news.
 
-## 🔧 Configuration
+## Configuration
 
 Edit `config.py` to customize:
 
@@ -220,7 +220,7 @@ momentum_windows = [5, 10, 20, 60]
 volatility_windows = [5, 10, 20, 60]
 ```
 
-## 📈 Advanced Usage
+## Advanced Usage
 
 ### Custom Factor Development
 
@@ -275,7 +275,7 @@ print(f"Sharpe: {result.metrics.sharpe_ratio:.2f}")
 print(f"Max DD: {result.metrics.max_drawdown*100:.1f}%")
 ```
 
-## 🧪 Testing
+## Testing
 
 ```python
 # Run validation tests
@@ -295,7 +295,7 @@ ic_result = validator.calculate_ic(signal, prices.pct_change(5).shift(-5))
 print(f"IC: {ic_result.ic:.3f}, p-value: {ic_result.p_value:.3f}")
 ```
 
-## 📝 Best Practices
+## Best Practices
 
 1. **Always validate before backtesting**
    - Run IC analysis first
@@ -334,19 +334,19 @@ print(f"IC: {ic_result.ic:.3f}, p-value: {ic_result.p_value:.3f}")
 ❌ **High turnover strategies without cost analysis**
 ✅ Calculate turnover impact explicitly
 
-## 📚 References
+## References
 
 - **Backtesting**: "Advances in Financial Machine Learning" - Marcos López de Prado
 - **Factor Validation**: "Active Portfolio Management" - Grinold & Kahn  
 - **Sentiment**: Loughran-McDonald Financial Sentiment Dictionary
 - **Risk Management**: "Quantitative Trading" - Ernest Chan
 
-## 📄 License
+## License
 
 This project is intended for educational and research purposes. 
 Not financial advice. Trade at your own risk.
 
-## 🤝 Contributing
+## Contributing
 
 Suggestions for improvements:
 1. Add machine learning factor combination
@@ -355,12 +355,12 @@ Suggestions for improvements:
 4. Include regime detection
 5. Build portfolio construction module
 
-## ✉️ Contact
+## Contact
 
 For questions about implementation or methodology, please open an issue on GitHub.
 
 ---
 
 **Note**: This system is designed to demonstrate quantitative research capabilities 
-for interviews and educational purposes. Always validate strategies on paper trading 
+for educational purposes. Always validate strategies on paper trading 
 before risking real capital.
