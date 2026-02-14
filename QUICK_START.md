@@ -21,7 +21,6 @@ Examples & Documentation:
 ✓ requirements.txt
 ✓ README.md
 ✓ SYSTEM_SUMMARY.md
-✓ IMPROVEMENT_ROADMAP.md
 ```
 
 ### Step 2: Install Dependencies
