@@ -2,6 +2,14 @@
 
 A modular quantitative research framework implementing institutional research practices for systematic strategy evaluation.
 
+## Design Principles
+
+- Separation of concerns between data, factor construction, validation, and execution
+- Validation-first approach before backtesting
+- Explicit modeling of transaction costs
+- Reproducible research workflow
+- Modular extensibility for new factors and models
+
 ## Key Features
 
 ### Statistics
@@ -9,14 +17,6 @@ A modular quantitative research framework implementing institutional research pr
 - **Statistical Significance Testing**: T-tests and p-values to validate predictive power  
 - **Quintile Analysis**: Verifies monotonicity of returns across factor buckets
 - **Turnover Analysis**: Quantifies trading costs and holding periods
-
-### Design Principles
-
-- Separation of concerns between data, factor construction, validation, and execution
-- Validation-first approach before backtesting
-- Explicit modeling of transaction costs
-- Reproducible research workflow
-- Modular extensibility for new factors and models
 
 ### Backtesting
 - **No Look-Ahead Bias**: Uses only data available at decision time
