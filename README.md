@@ -1,387 +1,116 @@
-# Production Quantitative Research System
+# Stock Factor Backtester
 
-A modular quantitative research framework for systematic strategy evaluation.
+A pipeline for testing whether technical indicators predict short-term stock returns. Given a ticker, it downloads price history, computes ~30 indicators, measures each one's predictive power using Information Coefficient analysis, and backtests the strongest signal with transaction costs included.
 
-## Design Principles
+## What It Does
 
-- Separation of concerns between data, factor construction, validation, and execution
-- Validation-first approach before backtesting
-- Explicit modeling of transaction costs
-- Reproducible research workflow
-- Modular extensibility for new factors and models
+1. **Downloads data** — pulls daily OHLCV from Yahoo Finance via `yfinance`, and fetches recent news headlines via DuckDuckGo
+2. **Computes indicators** — calculates ~30 technical indicators across four families: momentum, volatility, mean-reversion, and volume
+3. **Validates predictive power** — for each indicator, computes the Spearman correlation between today's signal value and the stock's return over the next N days (Information Coefficient). Filters to indicators with IC > 0.02 and p-value < 0.05
+4. **Backtests the best indicator** — simulates a long/flat strategy using the top indicator, applying 15 bps round-trip transaction costs (10 bps commissions + 5 bps slippage)
+5. **Scores news sentiment** — scores each headline −1 to +1 using a word-count lexicon, then builds sentiment-derived indicators
+6. **Generates a report** — outputs a formatted research note with IC stats, backtest metrics, and a signal recommendation
 
-## Key Features
+## Limitations to Know About
 
-### Statistics
-- **Information Coefficient (IC) Analysis**: Measures correlation between signals and forward returns
-- **Statistical Significance Testing**: T-tests and p-values to validate predictive power  
-- **Quintile Analysis**: Verifies monotonicity of returns across factor buckets
-- **Turnover Analysis**: Quantifies trading costs and holding periods
+- **Single stock only** — no portfolio construction or cross-sectional ranking
+- **Sentiment is a constant, not time-varying** — the sentiment score from today's headlines gets broadcast across the full price history, so sentiment-derived factors are not meaningful for backtesting
+- **No walk-forward validation** — the backtest uses the full in-sample period; there is no out-of-sample test
+- **Simple signal** — long when signal > threshold, otherwise flat; no short selling, no position sizing beyond a fixed cap
+- **Daily data only** — no intraday, no alternative data
 
-### Backtesting
-- **No Look-Ahead Bias**: Uses only data available at decision time
-- **Transaction Costs**: 10 bps commissions + 5 bps slippage per trade
-- **Proper Position Sizing**: Risk-based allocation with maximum limits
-- **Comprehensive Metrics**: Sharpe, Calmar, IC, Win Rate, Max Drawdown
-
-### Multi-Modal Analysis
-- **Technical Factors**: 30+ momentum, volatility, and reversal indicators
-- **Sentiment Analysis**: Quantitative news scoring using financial lexicons
-- **Factor Validation**: Pre-backtest filtering to avoid overfitting
-- **Automated Reporting**: Professional research notes with recommendations
-
-## Project Structure
-
-```
-quant_research_system/
-├── README.md
-├── QUICK_START.md
-├── SYSTEM_SUMMARY.md
-├── requirements.txt
-├── docs/
-│   └── architecture.md
-├── examples/
-│   └── example_usage.py
-├── tests/
-│   └── test_simple.py
-└── src/
-    ├── main_pipeline.py
-    ├── config.py
-    ├── data/
-    │   └── data_fetcher.py
-    ├── factors/
-    │   ├── factor_engineering.py
-    │   ├── factor_validation.py
-    │   └── sentiment_analysis.py
-    ├── backtest/
-    │   └── backtest_engine.py
-    └── reporting/
-        └── reporting.py
-```
-
-## Quick Start
-
-### Installation
+## Quickstart
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Or install individually
 pip install numpy pandas scipy yfinance duckduckgo-search
+python main_pipeline.py NVDA
 ```
 
-### Basic Usage
+Or from Python:
 
 ```python
-from src.main_pipeline import analyze_ticker
+from main_pipeline import analyze_ticker
 
-# Run complete analysis
 report, results = analyze_ticker("NVDA", period="2y")
-
-# Print report
 print(report)
-
-# Access structured results
-print(f"Best Factor: {results['best_factor']}")
-print(f"Sharpe Ratio: {results['backtest']['metrics']['sharpe_ratio']}")
 ```
 
-### Command Line Usage
+## Indicators Computed
 
-```bash
-python -m src.main_pipeline AAPL
-```
+**Momentum** — simple returns over 5/10/20/60-day windows, momentum acceleration (short minus long window), time-series momentum (fraction of up days), z-score normalized momentum, exponential moving average deviation
 
-## Sample Output
+**Volatility** — realized volatility over 5/10/20/60-day windows, short/long vol ratios, downside-only volatility, volatility of volatility
 
-```
-================================================================================
-QUANTITATIVE RESEARCH NOTE
-================================================================================
+**Mean-reversion** — distance from 10/20/50-day moving average, RSI(14), Bollinger Band position, z-score from rolling mean, rate-of-change oscillator
 
-Ticker:    NVDA
-Generated: 2024-02-14 12:00
+**Volume** — volume-weighted returns, volume trend (short vs. long average), on-balance volume
 
-================================================================================
+**Sentiment** — raw headline score, sentiment/price divergence, sentiment momentum, sentiment surprise vs. rolling baseline
 
-1. DATA SUMMARY
---------------------------------------------------------------------------------
-Market Data:
-  - Observations:  504 trading days
-  - Price Range:   $45.23 - $892.45
-  
-News Data:
-  - Headlines:     5
-  - Source:        Live Search
+## Key Concepts
 
-2. SENTIMENT ANALYSIS
---------------------------------------------------------------------------------
-Aggregate Sentiment:
-  - Score:         +0.347 (range: -1 to +1)
-  - Classification: POSITIVE
-  
-3. FACTOR VALIDATION (Rank #1)
---------------------------------------------------------------------------------
-Selected Factor: mom_20d_zscore
+**Information Coefficient (IC)** — Spearman rank correlation between a factor's value on day t and the stock's return from t to t+5. An IC of 0.04 is typical for a single technical factor; anything above 0.02 with p < 0.05 clears the viability bar used here.
 
-Information Coefficient Analysis:
-  - IC (Spearman):  +0.0421
-  - T-Statistic:    +3.156
-  - P-Value:        0.0018
-  - Significance:   ✓ YES (p < 0.05)
+**Forward returns** — calculated as `prices.pct_change(5).shift(-5)`, meaning the return earned *after* the signal date. Positions are lagged by one day (`signal.shift(1)`) to prevent look-ahead bias.
 
-Quintile Analysis:
-  - Monotonicity:  ✓ Returns are monotonic
-  - Q1-Q5 Spread:  4.32%
-
-4. BACKTEST RESULTS
---------------------------------------------------------------------------------
-Overall Rating: STRONG
-
-Risk-Adjusted Performance:
-  - Sharpe Ratio:        1.234
-  - CAGR:               +18.45%
-  - Maximum Drawdown:    -12.3%
-
-5. INVESTMENT THESIS & RECOMMENDATIONS
---------------------------------------------------------------------------------
-Signal Strength: BUY
-Confidence Level: MODERATE
-
-Key Findings:
-  ✓ Factor shows positive predictive power (IC = 0.042)
-  ✓ Relationship is statistically significant (p = 0.002)
-  ✓ Risk-adjusted returns are acceptable (Sharpe = 1.23)
-```
-
-## Technical Details
-
-### Factor Families
-
-**Momentum Factors** (9 factors)
-- Simple momentum (5d, 10d, 20d, 60d windows)
-- Momentum acceleration
-- Time-series momentum
-- Z-score normalized momentum
-- Exponential momentum
-
-**Volatility Factors** (7 factors)  
-- Realized volatility (multiple windows)
-- Volatility ratios
-- Downside volatility
-- Volatility of volatility
-
-**Reversal Factors** (7 factors)
-- Distance from moving averages
-- RSI (Relative Strength Index)
-- Bollinger Band position
-- Mean reversion z-scores
-- Rate of change oscillator
-
-**Sentiment Factors** (4 factors)
-- Raw sentiment score
-- Sentiment-price divergence
-- Sentiment momentum
-- Sentiment surprise
-
-### Validation Pipeline
-
-1. **IC Calculation**
-   - Spearman rank correlation (robust to outliers)
-   - T-statistic for significance testing
-   - Minimum IC threshold: 0.02
-
-2. **Quintile Analysis**
-   - Divides factor into 5 buckets
-   - Checks for monotonic returns
-   - Calculates Q1-Q5 spread
-
-3. **Turnover Analysis**
-   - Counts position flips
-   - Estimates transaction costs
-   - Maximum turnover: 50% per period
-
-4. **Backtest Validation**
-   - 5-day holding period
-   - 15 bps round-trip costs
-   - Minimum Sharpe: 0.5
-
-# Key Points:
-
-### On Backtesting
-> I prevent look-ahead bias by only using forward returns calculated from time t to t+h, ensuring no future information leaks into past decisions. Transaction costs are modeled at 10 bps for commissions plus 5 bps for slippage, totaling 15 bps per round trip.
-
-### On Factor Validation
-> I validate factors using Information Coefficient analysis, which measures the Spearman correlation between factor values and forward returns. A factor must have an IC above 0.02 with statistical significance (p < 0.05) to be considered viable.
-
-### On Overfitting Prevention
-> I use multiple safeguards: statistical significance testing with p-values, minimum sample size requirements (200+ observations), quintile analysis to verify monotonicity, and accept/reject thresholds before backtesting to avoid data mining.
-
-### On Sentiment
-> Rather than qualitative analysis, I use a Loughran-McDonald financial lexicon to score each headline numerically from -1 to +1. The scores are then aggregated using exponentially weighted averaging to give more weight to recent news.
+**Transaction costs** — 15 bps deducted per round trip (entry + exit), applied whenever position changes. High-turnover strategies are penalized accordingly.
 
 ## Configuration
 
-Edit `config.py` to customize:
+All parameters are in `config.py`:
 
 ```python
-# Backtest settings
-transaction_cost_bps = 10.0  # Per-trade cost
-slippage_bps = 5.0           # Market impact
-holding_period_days = 5       # Position hold time
-
-# Validation thresholds
-min_ic = 0.02                # Minimum IC
-max_turnover = 0.5           # Maximum turnover rate
-min_sharpe_ratio = 0.5       # Minimum acceptable Sharpe
-
-# Factor parameters
+transaction_cost_bps = 10.0   # Commission cost per trade
+slippage_bps = 5.0            # Market impact per trade
+holding_period_days = 5        # Forward return horizon
+min_ic = 0.02                  # Minimum IC to proceed to backtest
+min_sharpe_ratio = 0.5         # Minimum acceptable Sharpe
 momentum_windows = [5, 10, 20, 60]
-volatility_windows = [5, 10, 20, 60]
 ```
 
-## Advanced Usage
+## Output Metrics
 
-### Custom Factor Development
+| Metric | Description |
+|--------|-------------|
+| IC | Spearman correlation between signal and 5-day forward returns |
+| T-stat / p-value | Statistical significance of the IC |
+| Sharpe ratio | Annualized risk-adjusted return after costs |
+| CAGR | Compound annual growth rate |
+| Max drawdown | Largest peak-to-trough decline |
+| Win rate | Fraction of holding periods with positive return |
+| Calmar ratio | CAGR divided by absolute max drawdown |
 
-```python
-from factor_engineering import FactorEngine
-from data_fetcher import fetch_market_data
+## File Structure
 
-# Fetch data
-data = fetch_market_data("AAPL", period="2y")
-
-# Compute factors
-engine = FactorEngine()
-factors = engine.compute_all_factors(data.prices, data.volumes)
-
-# Access specific factor
-momentum_5d = engine.get_factor('mom_5d')
+```
+config.py              # All parameters
+data_fetcher.py        # yfinance + DuckDuckGo data acquisition
+factor_engineering.py  # Indicator computation
+sentiment_analysis.py  # Headline scoring and sentiment factors
+factor_validation.py   # IC analysis and viability filtering
+backtest_engine.py     # Signal backtesting with costs
+reporting.py           # Research note generation
+main_pipeline.py       # Orchestrates the full workflow
 ```
 
-### Factor Validation
+## Dependencies
 
-```python
-from factor_validation import FactorValidator
-
-# Validate a single factor
-validator = FactorValidator()
-report = validator.validate_factor(
-    factor_name='mom_20d',
-    factor_values=factor_series,
-    prices=price_series,
-    horizon=5
-)
-
-print(report.recommendation)
-print(f"IC: {report.ic_analysis.ic:.3f}")
-print(f"Viable: {report.is_viable}")
+```
+numpy >= 1.24
+pandas >= 2.0
+scipy >= 1.10
+yfinance >= 0.2.28
+duckduckgo-search >= 3.8
 ```
 
-### Custom Backtesting
+## What to Add to Make This More Rigorous
 
-```python
-from backtest_engine import VectorBacktester
-
-backtester = VectorBacktester()
-result = backtester.backtest_signal(
-    prices=price_series,
-    signal=factor_series,
-    signal_threshold=0.0,
-    position_size=1.0
-)
-
-print(f"Sharpe: {result.metrics.sharpe_ratio:.2f}")
-print(f"Max DD: {result.metrics.max_drawdown*100:.1f}%")
-```
-
-## Testing
-
-```python
-# Run validation tests
-from factor_validation import FactorValidator
-import numpy as np
-import pandas as pd
-
-# Create synthetic data
-dates = pd.date_range('2020-01-01', periods=500)
-prices = pd.Series(100 * np.exp(np.cumsum(np.random.randn(500) * 0.01)), index=dates)
-signal = pd.Series(np.random.randn(500), index=dates)
-
-# Validate
-validator = FactorValidator()
-ic_result = validator.calculate_ic(signal, prices.pct_change(5).shift(-5))
-
-print(f"IC: {ic_result.ic:.3f}, p-value: {ic_result.p_value:.3f}")
-```
-
-## Best Practices
-
-1. **Always validate before backtesting**
-   - Run IC analysis first
-   - Check statistical significance  
-   - Verify turnover is acceptable
-
-2. **Use realistic assumptions**
-   - Include transaction costs
-   - Model slippage
-   - Account for market impact
-
-3. **Prevent overfitting**
-   - Use out-of-sample testing
-   - Require statistical significance
-   - Limit parameter optimization
-
-4. **Document everything**
-   - Log all assumptions
-   - Record validation results
-   - Maintain audit trail
-
-## Common Implementation Pitfalls
-
- **Using future data in the past** (look-ahead bias)
- Only use forward returns calculated from time t onward
-
- **Ignoring transaction costs**
- Include 10-15 bps per trade minimum
-
- **Over-optimizing on historical data**
- Validate on out-of-sample periods
-
- **Trading signals with IC < 0.02**
- Set minimum quality thresholds
-
- **High turnover strategies without cost analysis**
- Calculate turnover impact explicitly
-
-## References
-
-- **Backtesting**: "Advances in Financial Machine Learning" - Marcos López de Prado
-- **Factor Validation**: "Active Portfolio Management" - Grinold & Kahn  
-- **Sentiment**: Loughran-McDonald Financial Sentiment Dictionary
-- **Risk Management**: "Quantitative Trading" - Ernest Chan
+- **Walk-forward validation** — fit on a rolling training window, evaluate on held-out periods
+- **Cross-sectional testing** — rank factors across a universe of stocks rather than testing on one at a time
+- **Time-varying sentiment** — ingest a news feed with timestamps so sentiment factors update daily
+- **Factor combination** — weight multiple factors using regression or a simple ensemble instead of picking the single best
+- **Regime conditioning** — track whether the market is trending or mean-reverting and adjust which factor family to use
 
 ## License
 
-This project is intended for educational and research purposes. 
-Not financial advice. Trade at your own risk.
-
-## Contributing
-
-Suggestions for improvements:
-1. Add machine learning factor combination
-2. Implement walk-forward optimization
-3. Add multi-asset support
-4. Include regime detection
-5. Build portfolio construction module
-
-## Contact
-
-For questions about implementation or methodology, please open an issue on GitHub.
-
----
-
-**Note**: This system is designed to demonstrate quantitative research capabilities 
-for educational purposes. Always validate strategies on paper trading 
-before risking real capital.
+For educational and research purposes. Not financial advice.
