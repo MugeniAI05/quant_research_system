@@ -1,6 +1,6 @@
 # equity-factor-lab
 
-A systematic framework for testing whether a quantitative equity signal has genuine predictive content — applied to volume-based signals in S&P 100 stocks.
+A systematic framework for testing whether a quantitative equity signal has predictive content, applied to volume-based signals in S&P 100 stocks.
 
 Built as a research writing sample demonstrating production-grade quantitative methods: signal decomposition, Fama-MacBeth regression with factor controls, multiple testing correction, Fama-French 5-factor augmentation, alternative data integration, and honest out-of-sample validation.
 
