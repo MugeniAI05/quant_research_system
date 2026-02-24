@@ -125,7 +125,7 @@ python run_analysis.py   # TICKER = "NVDA" by default, change at top of file
 - **FF5 augmentation** — rolling per-stock betas on price/volume proxies for RMW and CMA
 - **Cost model anchored to AUM** — correct direction (AUM → position → ADV participation), not reverse
 
-### Honest limitations
+### Limitations
 - **Survivorship bias** — yfinance returns current index constituents; stocks that were delisted are excluded. True point-in-time data requires CRSP.
 - **3-year history** — limits statistical power; 7 walk-forward windows is directional evidence, not conclusive.
 - **FF5 proxies** — RMW and CMA require Compustat (book value, operating profitability, total assets). Price/volume proxies are approximations.
