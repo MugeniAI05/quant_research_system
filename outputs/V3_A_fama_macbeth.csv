@@ -1,0 +1,7 @@
+Signal,N days,Raw coef,Raw t-stat,Raw p-val,Ctrl coef,Ctrl t-stat,Ctrl p-val,Attenuation,Avg R²,Sig (raw),Sig (ctrl)
+obv_upvol_z,498,-4.6e-05,-0.376,0.707,0.000145,1.357,0.1754,3.159,0.22577,no,no
+obv_downvol_z,498,8.9e-05,0.759,0.448,-8.6e-05,-0.781,0.4355,0.968,0.22566,no,no
+vol_price_divergence_z,498,0.00021,2.193,0.0288,0.000183,1.993,0.0468,0.873,0.22594,YES,YES
+vol_surprise_z,498,0.000188,1.979,0.0484,0.000199,2.191,0.0289,1.054,0.22653,YES,YES
+signed_vol_imbalance_z,498,-9.1e-05,-0.751,0.4528,0.000127,1.208,0.2276,1.396,0.23722,no,no
+obv_composite_z,498,-3.3e-05,-0.24,0.8106,0.000123,1.169,0.2429,3.702,0.22979,no,no

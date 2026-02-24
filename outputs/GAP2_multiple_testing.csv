@@ -1,0 +1,7 @@
+Signal,Raw p-val,Ctrl p-val,bonf_raw,holm_raw,bh_raw,bonf_ctrl,holm_ctrl,bh_ctrl,sig_bh_raw,sig_bh_ctrl
+obv_upvol_z,0.707,0.1754,1.0,1.0,0.8106,1.0,0.7016,0.2915,False,False
+obv_downvol_z,0.448,0.4355,1.0,1.0,0.6792,1.0,0.7016,0.4355,False,False
+vol_price_divergence_z,0.0288,0.0468,0.1728,0.1728,0.1452,0.2808,0.234,0.1404,False,False
+vol_surprise_z,0.0484,0.0289,0.2904,0.242,0.1452,0.1734,0.1734,0.1404,False,False
+signed_vol_imbalance_z,0.4528,0.2276,1.0,1.0,0.6792,1.0,0.7016,0.2915,False,False
+obv_composite_z,0.8106,0.2429,1.0,1.0,0.8106,1.0,0.7016,0.2915,False,False

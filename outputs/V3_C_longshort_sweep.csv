@@ -1,0 +1,5 @@
+Signal,Rebalance,Sharpe,CAGR %,Max DD %,Win %,Turnover,IC
+vol_price_divergence_z,Daily (1d),-1.056,-4.99,-20.13,44.8,136.6,0.0061
+vol_price_divergence_z,Weekly (5d),-0.128,-0.69,-6.92,46.7,8.5,0.0061
+vol_price_divergence_z,Bi-weekly (10d),0.902,3.88,-3.7,46.8,1.9,0.0061
+vol_price_divergence_z,Monthly (21d),-0.503,-2.59,-12.46,43.4,0.4,0.0061

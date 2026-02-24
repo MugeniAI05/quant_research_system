@@ -1,0 +1,6 @@
+Signal,N weeks,Avg N stocks,Mean beta,HAC t-stat,p-value,Significant,Direction
+attention_surprise,149,40.0,0.002263,3.62,0.0004,YES,continuation
+attention_momentum,145,39.7,0.001918,3.278,0.0013,YES,continuation
+weekly_vol_surprise,142,40.0,-0.000274,-0.657,0.5125,no,reversal
+vol_attn_interaction,142,40.0,2.9e-05,0.056,0.9555,no,continuation
+institutional_vol_proxy,142,40.0,-0.000554,-1.248,0.2141,no,reversal
