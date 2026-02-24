@@ -160,4 +160,4 @@ python run_analysis.py   # TICKER = "NVDA" by default, change at top of file
 
 ---
 
-*Research conducted Feb–Mar 2026. Not investment advice.*
+*Research conducted Jan–Mar 2026. Not investment advice.*
